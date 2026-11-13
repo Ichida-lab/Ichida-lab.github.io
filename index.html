@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>気になる要約</title>
+<meta name="description" content="国内外の報道や調査報告から、情報安全保障、影響工作、AIに関わる記事を選び、日本語で要約した一覧である。各項目から元記事を開ける。">
+<style>
+:root{
+  --bg:#fbfaf7; --fg:#1f1f1f; --muted:#5f5f5f; --line:#dedbd3; --card:#ffffff;
+  --accent:#1f4e79; --accent-bg:#eaf0f6; --mark:#fff1a8; --focus:#1f4e79; --on-accent:#ffffff;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#151618; --fg:#e7e6e2; --muted:#a3a29d; --line:#34363a; --card:#1d1f22;
+    --accent:#8db8e2; --accent-bg:#22303d; --mark:#5a4d12; --focus:#8db8e2; --on-accent:#151618;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic","Meiryo",sans-serif;
+  line-height:1.75;font-size:16px;overflow-wrap:anywhere;word-break:normal}
+a{color:var(--accent)}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+header.site{border-bottom:1px solid var(--line);padding:28px 0 18px}
+header.site h1{font-size:1.6rem;margin:0 0 8px;letter-spacing:.02em;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;font-weight:600}
+header.site p.desc{margin:0 0 10px;color:var(--fg)}
+.meta{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:4px 18px;color:var(--muted);font-size:.875rem}
+.controls{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 0}
+.row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:2px;min-width:0}
+.field label,.field .lab{font-size:.75rem;color:var(--muted)}
+.field.q{flex:1 1 100%}
+.qrow{display:flex;gap:8px;min-width:0}
+.qrow input{flex:1 1 auto}
+.qrow select{flex:0 0 auto}
+input,select,button{font:inherit;font-size:.95rem;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 8px;min-width:0;max-width:100%}
+input[type=search]{width:100%}
+input[type=date]{width:10.5em}
+button{cursor:pointer}
+button:hover{border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.seg{display:flex;gap:6px}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.adv{flex:1 1 100%;min-width:0}
+.adv summary{font-size:.8rem;color:var(--muted);cursor:pointer;padding:2px 0}
+.adv[open] summary{margin-bottom:6px}
+@media (min-width:521px){.adv summary{display:none}}
+.status{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin-top:8px;font-size:.875rem;color:var(--muted)}
+.linkbtn{background:none;border:none;padding:0;color:var(--accent);text-decoration:underline;font-size:.875rem;cursor:pointer}
+main{padding:4px 0 24px}
+h2.day{font-size:.95rem;margin:22px 0 0;padding-bottom:3px;border-bottom:2px solid var(--fg);font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+.item{border-bottom:1px solid var(--line)}
+.item.hit{border-left:3px solid var(--accent)}
+h3.ih{margin:0;font-size:1rem;font-weight:400;line-height:1.55}
+.ihb{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px;width:100%;margin:0;padding:6px 2px 6px 20px;position:relative;
+  text-align:left;background:none;border:0;border-radius:0;color:var(--fg);font-size:1rem;line-height:1.55}
+.ihb::before{content:"\25B8";position:absolute;left:4px;top:6px;color:var(--muted);font-size:.85rem}
+.ihb[aria-expanded=true]::before{content:"\25BE"}
+.ihb[aria-expanded=true] .tt{font-weight:600}
+.ihb:hover .tt{text-decoration:underline}
+.tt{flex:1 1 20em;min-width:0}
+.dm{margin-left:auto;font-size:.75rem;color:var(--muted);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.ibody{padding:0 2px 14px 20px}
+.summary{white-space:pre-line;margin:0}
+.src{margin:10px 0 0;padding:8px 0 0;border-top:1px dashed var(--line);font-size:.9rem}
+.src .t{font-style:italic}
+.src .sub{color:var(--muted)}
+.links{margin-top:4px;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.9rem}
+.perma{margin-top:6px;font-size:.8rem;text-align:right}
+.perma a{color:var(--muted)}
+mark{background:var(--mark);color:inherit;padding:0}
+.notice{background:var(--accent-bg);border-radius:4px;padding:8px 12px;margin:12px 0;font-size:.9rem}
+.empty{color:var(--muted);padding:24px 0}
+#more{display:block;margin:16px auto;padding:8px 24px}
+footer{border-top:1px solid var(--line);padding:16px 0 32px;color:var(--muted);font-size:.875rem}
+footer h2{font-size:.9rem;margin:0 0 6px;color:var(--fg)}
+footer p{margin:0 0 6px}
+@media (max-width:520px){
+  header.site h1{font-size:1.35rem}
+  input[type=date]{width:9.6em}
+  .qrow select{max-width:9.5em}
+  .ibody{padding-left:12px}
+}
+</style>
+<script>window.SITE_CONFIG={"goatcounter": "ichida", "pageSize": 100};</script>
+<script data-goatcounter="https://ichida.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <h1>気になる要約</h1>
+  <p class="desc">国内外の報道や調査報告から、情報安全保障、影響工作、AIに関わる記事を選び、日本語で要約した一覧である。各項目から元記事を開ける。</p>
+  <ul class="meta">
+    <li>最終更新 <span id="updated">2026年11月14日 08:43（日本時間）</span></li>
+    <li>掲載 <span id="total">1492</span>件</li>
+    <li>掲載期間 <span id="period">2026年9月26日〜2026年11月13日</span></li>
+  </ul>
+</div></header>
+<div class="controls"><div class="wrap">
+  <form id="filters" class="row" role="search" onsubmit="return false">
+    <div class="field q"><label for="q">語句検索（複数の語は空白で区切る）</label>
+      <div class="qrow"><input type="search" id="q" autocomplete="off" placeholder="例 ロシア 選挙">
+        <select id="mode" aria-label="複数の語の扱い"><option value="and">すべての語を含む</option><option value="or">いずれかの語を含む</option></select></div></div>
+    <details id="adv" class="adv"><summary>期間、並び順で絞り込む</summary><div class="row">
+    <div class="field"><span class="lab" id="spanlab">直近の期間</span>
+      <div class="seg" role="group" aria-labelledby="spanlab">
+        <button type="button" id="w1" aria-pressed="false">1週間</button>
+        <button type="button" id="w4" aria-pressed="false">4週間</button></div></div>
+    <div class="field"><label for="from">開始日</label><input type="date" id="from"></div>
+    <div class="field"><label for="to">終了日</label><input type="date" id="to"></div>
+    <div class="field"><label for="sort">並び順</label>
+      <select id="sort"><option value="new">新しい順</option><option value="old">古い順</option></select></div>
+    </div></details>
+  </form>
+  <script>(function(){if(!window.matchMedia)return;var mq=matchMedia("(min-width:521px)"),adv=document.getElementById("adv");function f(){if(mq.matches)adv.open=true;}f();if(mq.addEventListener)mq.addEventListener("change",f);else if(mq.addListener)mq.addListener(f);})();</script>
+  <div class="status"><span id="count" aria-live="polite">読み込み中</span>
+    <button type="button" class="linkbtn" id="reset">条件を消す</button></div>
+</div></div>
+<main class="wrap" id="main">
+  <div id="notice"></div>
+  <div id="list"></div>
+  <button type="button" id="more" hidden>もっと見る</button>
+  <div id="sentinel" aria-hidden="true"></div>
+  <noscript><p class="empty">この一覧の表示には JavaScript が必要である。</p></noscript>
+</main>
+<footer><div class="wrap">
+  <h2>このページについて</h2>
+  <p>要約はAIを利用して作成している。元記事の内容をまとめたもので、詳細と正確な表現は元記事で確かめられたい。元記事の著作権は、各媒体と執筆者にある。</p>
+  <p>本ページの要約は、出典（本ページのURL）を示せば利用できる。</p>
+  <p>本ページは、閲覧数と、元記事へのリンクが開かれた回数を GoatCounter で集計している。クッキーは使わず、個人を特定する情報は収集しない。検索に入力した語句は送信しない。ページの配信には GitHub Pages を利用している。</p>
+  <p>執筆者の記事は <a href="https://note.com/ichi_twnovel" rel="noopener">note（一田和樹）</a> に掲載している。</p>
+</div></footer>
+<script>
+(function(){
+  "use strict";
+  var CFG = window.SITE_CONFIG || {};
+  var PAGE = CFG.pageSize || 100;
+  var SPANS = {w1:7, w4:28};  // 最終日を含む日数
+  var ALL = [], BYID = {}, VIEW = [], OPEN = {}, META = {}, shown = 0, lastDay = null, terms = [];
+  var $ = function(id){ return document.getElementById(id); };
+  var el = {q:$("q"), mode:$("mode"), from:$("from"), to:$("to"), sort:$("sort"), w1:$("w1"), w4:$("w4"),
+            list:$("list"), more:$("more"), count:$("count"), notice:$("notice"), sentinel:$("sentinel")};
+  function blank(){ return {q:"", mode:"and", from:"", to:"", sort:"new", span:"", id:""}; }
+  var state = blank();
+
+  function norm(s){ s = String(s || ""); try { s = s.normalize("NFKC"); } catch(e){} return s.toLowerCase(); }
+  function splitTerms(q){ return norm(q).split(/[\s　]+/).filter(Boolean); }
+  function jpDate(iso){ var p = iso.split("-"); return p[0] + "年" + (+p[1]) + "月" + (+p[2]) + "日"; }
+  function safeUrl(u){ return /^https?:\/\//i.test(u) ? u : null; }
+  function addDays(iso, n){
+    var p = iso.split("-"), d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2] + n));
+    return d.toISOString().slice(0, 10);
+  }
+  function spanFrom(k){ return addDays(META.last, -(SPANS[k] - 1)); }
+  function spanOf(from, to){
+    if (!META.last || !from || to !== META.last) return "";
+    for (var k in SPANS) if (from === spanFrom(k)) return k;
+    return "";
+  }
+
+  function load(){
+    var done = false;
+    function ok(d){ if (done) return; done = true; init(d); }
+    function fallback(){
+      if (done) return;
+      if (window.ARTICLES) { ok(window.ARTICLES); return; }
+      var s = document.createElement("script");
+      s.src = "data/articles.js";
+      s.onload = function(){ if (window.ARTICLES) ok(window.ARTICLES); else fail(); };
+      s.onerror = fail;
+      document.head.appendChild(s);
+    }
+    function fail(){ el.count.textContent = "データを読み込めなかった。時間をおいて再読み込みされたい。"; }
+    if (location.protocol === "file:" || !window.fetch) { fallback(); return; }
+    fetch("data/articles.json", {cache:"no-cache"}).then(function(r){
+      if (!r.ok) throw new Error(r.status); return r.json();
+    }).then(ok).catch(fallback);
+  }
+
+  function init(data){
+    ALL = (data && data.items) || [];
+    var m = META = (data && data.meta) || {};
+    if (m.generated) $("updated").textContent = m.generated;
+    if (m.period_label) $("period").textContent = m.period_label;
+    $("total").textContent = ALL.length;
+    ALL.forEach(function(it, i){
+      it._i = i; BYID[it.id] = it;
+      var parts = [it.title, it.summary];
+      (it.sources || []).forEach(function(s){ parts.push(s.title, s.by); });
+      it._s = norm(parts.join("\n"));
+    });
+    if (m.first) { el.from.min = el.to.min = m.first; }
+    if (m.last) { el.from.max = el.to.max = m.last; }
+    if (!m.last) { el.w1.disabled = el.w4.disabled = true; }
+    readHash(); apply();
+    var t = null;
+    el.q.addEventListener("input", function(){ clearTimeout(t); t = setTimeout(function(){ fromForm(); }, 220); });
+    [el.mode, el.sort].forEach(function(x){ x.addEventListener("change", function(){ fromForm(); }); });
+    // 日付を手で変えたら、期間のボタンの選択を外す
+    [el.from, el.to].forEach(function(x){ x.addEventListener("change", function(){ fromForm(""); }); });
+    [el.w1, el.w4].forEach(function(b){ b.addEventListener("click", function(){ setSpan(b.id); }); });
+    $("reset").addEventListener("click", function(){ state = blank(); writeHash(); readHash(); apply(); });
+    window.addEventListener("hashchange", function(){ readHash(); apply(); });
+    el.more.addEventListener("click", renderMore);
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function(es){
+        if (es[0].isIntersecting && shown > 0 && shown < VIEW.length) renderMore();
+      }, {rootMargin:"600px"}).observe(el.sentinel);
+    }
+    el.list.addEventListener("click", onListClick);
+  }
+
+  function showPressed(){
+    for (var k in SPANS) el[k].setAttribute("aria-pressed", state.span === k ? "true" : "false");
+  }
+  function setSpan(k){
+    if (!META.last) return;
+    if (state.span === k) { el.from.value = ""; el.to.value = ""; fromForm(""); return; }  // もう一度押すと解除
+    el.from.value = spanFrom(k); el.to.value = META.last; fromForm(k);
+  }
+
+  function readHash(){
+    var h = location.hash.replace(/^#/, ""), p;
+    try { p = new URLSearchParams(h); } catch(e){ p = new URLSearchParams(""); }
+    state = {q:p.get("q") || "", mode:p.get("mode") === "or" ? "or" : "and",
+             from:p.get("from") || "", to:p.get("to") || "",
+             sort:p.get("sort") === "old" ? "old" : "new", span:"", id:p.get("id") || ""};
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(state.from)) state.from = "";
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(state.to)) state.to = "";
+    state.span = spanOf(state.from, state.to);
+    el.q.value = state.q; el.mode.value = state.mode; el.from.value = state.from; el.to.value = state.to; el.sort.value = state.sort;
+    showPressed();
+  }
+  function writeHash(){
+    var p = new URLSearchParams();
+    if (state.id) p.set("id", state.id);
+    else {
+      if (state.q) p.set("q", state.q);
+      if (state.mode === "or") p.set("mode", "or");
+      if (state.from) p.set("from", state.from);
+      if (state.to) p.set("to", state.to);
+      if (state.sort === "old") p.set("sort", "old");
+    }
+    var s = p.toString();
+    var url = location.pathname + location.search + (s ? "#" + s : "");
+    try { history.replaceState(null, "", url); } catch(e){ location.hash = s; }
+  }
+  function fromForm(span){
+    state = {q:el.q.value.trim(), mode:el.mode.value === "or" ? "or" : "and", from:el.from.value, to:el.to.value,
+             sort:el.sort.value === "old" ? "old" : "new", span:span === undefined ? state.span : span, id:""};
+    showPressed(); writeHash(); apply();
+  }
+
+  function apply(){
+    el.notice.textContent = "";
+    if (state.id) {
+      VIEW = BYID[state.id] ? [BYID[state.id]] : [];
+      terms = [];
+      if (VIEW.length) OPEN[state.id] = true;
+      var n = document.createElement("div"); n.className = "notice";
+      n.appendChild(document.createTextNode(VIEW.length ? "個別の項目を表示している。" : "指定の項目は掲載期間外か、見つからない。"));
+      var a = document.createElement("a"); a.href = "#"; a.textContent = "一覧をすべて表示";
+      a.addEventListener("click", function(ev){ ev.preventDefault(); state.id = ""; writeHash(); apply(); });
+      n.appendChild(document.createTextNode(" ")); n.appendChild(a);
+      el.notice.appendChild(n);
+    } else {
+      terms = splitTerms(state.q);
+      var any = state.mode === "or";
+      var f = state.from, t = state.to;
+      if (f && t && f > t) { var x = f; f = t; t = x; }
+      VIEW = ALL.filter(function(it){
+        if (f && it.date < f) return false;
+        if (t && it.date > t) return false;
+        if (!terms.length) return true;
+        for (var i = 0; i < terms.length; i++) {
+          var hit = it._s.indexOf(terms[i]) >= 0;
+          if (any && hit) return true;
+          if (!any && !hit) return false;
+        }
+        return !any;
+      });
+      if (state.sort === "old") VIEW.sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : a._i - b._i; });
+      else VIEW.sort(function(a, b){ return a.date > b.date ? -1 : a.date < b.date ? 1 : a._i - b._i; });
+    }
+    el.count.textContent = "該当 " + VIEW.length + "件（全 " + ALL.length + "件）";
+    el.list.textContent = ""; shown = 0; lastDay = null;
+    if (!VIEW.length && !state.id) {
+      var e = document.createElement("p"); e.className = "empty"; e.textContent = "条件に合う記事はない。";
+      el.list.appendChild(e);
+    }
+    renderMore();
+  }
+
+  function hl(parent, text){
+    if (!terms.length) { parent.appendChild(document.createTextNode(text)); return; }
+    var nt = norm(text);
+    // NFKC で長さが変わる文字があるときは強調しない
+    if (nt.length !== text.length) { parent.appendChild(document.createTextNode(text)); return; }
+    var marks = [];
+    terms.forEach(function(w){ var i = 0; while ((i = nt.indexOf(w, i)) >= 0) { marks.push([i, i + w.length]); i += w.length; } });
+    if (!marks.length) { parent.appendChild(document.createTextNode(text)); return; }
+    marks.sort(function(a, b){ return a[0] - b[0]; });
+    var pos = 0;
+    marks.forEach(function(m){
+      if (m[0] < pos) { if (m[1] > pos) m[0] = pos; else return; }
+      if (m[0] > pos) parent.appendChild(document.createTextNode(text.slice(pos, m[0])));
+      var mk = document.createElement("mark"); mk.textContent = text.slice(m[0], m[1]); parent.appendChild(mk);
+      pos = m[1];
+    });
+    if (pos < text.length) parent.appendChild(document.createTextNode(text.slice(pos)));
+  }
+
+  function row(it){
+    var d = document.createElement("div"); d.className = "item"; d.id = "item-" + it.id;
+    if (state.id && state.id === it.id) d.classList.add("hit");
+    var h = document.createElement("h3"); h.className = "ih";
+    var b = document.createElement("button"); b.type = "button"; b.className = "ihb";
+    b.setAttribute("aria-controls", "body-" + it.id); b.dataset.id = it.id;
+    var tt = document.createElement("span"); tt.className = "tt"; hl(tt, it.title); b.appendChild(tt);
+    h.appendChild(b); d.appendChild(h);
+    var body = document.createElement("div"); body.className = "ibody"; body.id = "body-" + it.id;
+    d.appendChild(body);
+    setOpen(b, body, it, !!OPEN[it.id]);
+    return d;
+  }
+
+  function setOpen(b, body, it, open){
+    if (open && !body.firstChild) fillBody(body, it);  // 中身は初めて開くときに作る
+    body.hidden = !open;
+    b.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) OPEN[it.id] = true; else delete OPEN[it.id];
+  }
+
+  function fillBody(body, it){
+    var s = document.createElement("p"); s.className = "summary"; hl(s, it.summary); body.appendChild(s);
+    var src = document.createElement("div"); src.className = "src";
+    (it.sources || []).forEach(function(x){
+      var d = document.createElement("div");
+      var lab = document.createElement("span"); lab.className = "sub"; lab.textContent = "元記事 "; d.appendChild(lab);
+      var t = document.createElement("span"); t.className = "t"; hl(t, x.title); d.appendChild(t);
+      var sub = document.createElement("div"); sub.className = "sub";
+      hl(sub, [x.by, x.date].filter(Boolean).join("、"));
+      d.appendChild(sub); src.appendChild(d);
+    });
+    var links = document.createElement("div"); links.className = "links";
+    var doms = it.domains || [];
+    (it.urls || []).forEach(function(u, i){
+      var su = safeUrl(u); if (!su) return;
+      var l = document.createElement("a"); l.href = su; l.target = "_blank"; l.rel = "noopener noreferrer";
+      l.className = "out"; l.dataset.id = it.id;
+      var dm = ""; try { dm = new URL(su).hostname.replace(/^www\./, ""); } catch(e){ dm = doms[i] || ""; }
+      l.textContent = (it.urls.length > 1 ? "元記事" + (i + 1) : "元記事") + "を開く" + (dm ? "（" + dm + "）" : "");
+      links.appendChild(l);
+    });
+    src.appendChild(links); body.appendChild(src);
+    var p = document.createElement("div"); p.className = "perma";
+    var pl = document.createElement("a"); pl.href = "#id=" + encodeURIComponent(it.id); pl.textContent = "この項目へのリンク";
+    p.appendChild(pl); body.appendChild(p);
+  }
+
+  function renderMore(){
+    var frag = document.createDocumentFragment(), end = Math.min(VIEW.length, shown + PAGE);
+    for (var i = shown; i < end; i++) {
+      var it = VIEW[i];
+      if (it.date !== lastDay) {
+        var h = document.createElement("h2"); h.className = "day"; h.textContent = jpDate(it.date);
+        frag.appendChild(h); lastDay = it.date;
+      }
+      frag.appendChild(row(it));
+    }
+    el.list.appendChild(frag); shown = end;
+    var rest = VIEW.length - shown;
+    el.more.hidden = rest <= 0;
+    if (rest > 0) el.more.textContent = "もっと見る（残り " + rest + "件）";
+  }
+
+  function onListClick(ev){
+    var t = ev.target;
+    var b = t.closest ? t.closest(".ihb") : null;
+    if (b) {
+      var it = BYID[b.dataset.id], body = $("body-" + b.dataset.id);
+      if (it && body) setOpen(b, body, it, b.getAttribute("aria-expanded") !== "true");
+      return;
+    }
+    var l = t.closest ? t.closest("a.out") : null;
+    if (l) track(l.dataset.id);
+  }
+
+  function track(id){
+    if (!CFG.goatcounter) return;
+    var it = BYID[id];
+    try {
+      var gc = window.goatcounter;
+      if (gc && typeof gc.count === "function") {
+        gc.count({path:"click/" + id, title:it ? it.title : id, event:true});
+      }
+    } catch(e){}
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
